@@ -1,0 +1,24 @@
+name: Run Tests
+
+on:
+  push:
+    branches:
+      - main  # Cambia esto al nombre de tu rama principal
+  pull_request:
+    branches:
+      - main  # Cambia esto al nombre de tu rama principal
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test  # Ajusta este comando si tus pruebas tienen un nombre diferente
+
