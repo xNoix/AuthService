@@ -1,0 +1,27 @@
+name: Run Build
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: docker build -t my-express-app .
+
+      - name: Test Docker image
+        run: docker run my-express-app npm test  # Cambia `npm test` por el comando de prueba de tu aplicación si es diferente
+
+      - name: Push Docker image to registry
+        run: |
+          echo ${{ secrets.DOCKER_PASSWORD }} | docker login -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+          docker tag my-express-app ${{ secrets.DOCKER_USERNAME }}/my-express-app:${{ github.sha }}
+          docker push ${{ secrets.DOCKER_USERNAME }}/my-express-app:${{ github.sha }}
+
